@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego del Ahorcado</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #a7a2a2;
+            text-align: center;
+            padding: 50px;
+        }
+
+        h1 {
+            color: #000000;
+        }
+
+        #mostrarPalabra {
+            font-size: 80px;
+        }
+
+        #mensaje {
+            font-size: 44px;
+            color: rgb(0, 0, 0);
+        }
+
+        #emote {
+            font-size: 50px;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>Juego del Ahorcado</h1>
+
+    <div id="emote"></div>
+    <div id="mostrarPalabra"></div>
+    <div id="letrasAdivinadas"></div>
+    <div id="mensaje"></div>
+
+    <input type="text" id="inputLetra" maxlength="1" placeholder="Letra"><br><br>
+    <button onclick="adivinarLetra()">Adivinar</button>
+
+    <script>
+        let palabras = ["pokemon","goku","pikachu","adivinanza","pelicula","árbol","cielo","mariposa","luz","sonrisa","montaña","río","estrella","flores","libro","sueño","paz","corazón","viento","nube","piedra","música","tiempo","horizonte","pintura","sabiduría","amor","naturaleza","aventura","libertad"];
+        let palabraInsertada = palabras[Math.floor(Math.random() * palabras.length)];
+        let letrasAdivinadas = [];
+        let contador = 0;
+
+        const mostrarPalabra = document.getElementById("mostrarPalabra");
+        const mensajeDiv = document.getElementById("mensaje");
+        const inputLetra = document.getElementById("inputLetra");
+        const letrasAdivinadasDiv = document.getElementById("letrasAdivinadas");
+        const emoteDiv = document.getElementById("emote");
+
+        function mostrar() {
+            let mostrar = palabraInsertada.split('').map(letra => letrasAdivinadas.includes(letra) ? letra : '_').join(' ');
+            mostrarPalabra.textContent = mostrar;
+
+            if (!mostrar.includes('_')) {
+                mensajeDiv.textContent = "¡Felicidades, ganaste!";
+            }
+        }
+
+        function emote() {
+            let emote = "";
+            if (contador == 0) {
+                emote = "";
+            } else if (contador == 1) {
+                emote = "🦵";
+            } else if (contador == 2) {
+                emote = "🦵🦵";
+            } else if (contador == 3) {
+                emote = "💪🦵🦵";
+            } else if (contador == 4) {
+                emote = "💪💪🦵🦵";
+            } else if (contador == 5) {
+                emote = "👕💪💪🦵🦵";
+            }else if (contador==6){
+                emote = "💀";
+            }
+            emoteDiv.textContent = emote;
+        }
+
+        function adivinarLetra() {
+            let letra = inputLetra.value.toLowerCase();
+            inputLetra.value = "";
+
+            if (letrasAdivinadas.includes(letra)) {
+                inputLetra.focus();
+                return;
+            }
+
+            letrasAdivinadas.push(letra);
+
+            if (palabraInsertada.includes(letra)) {
+                mostrar();
+            } else {
+                contador++;
+                emote();
+                if (contador >= 6) {
+                    mensajeDiv.textContent = `¡Perdiste! La palabra era: ${palabraInsertada}`;
+                }
+            }
+            inputLetra.focus();
+            mostrar();
+        }
+        mostrar();
+    </script>
+
+</body>
+
+</html>
